@@ -28,24 +28,24 @@ export default {
               artist: "Eminem feat Juice WRLD",
               description:
                 "Godzilla is a single by American rapper Eminem featuring American rapper Juice Wrld. It was released as a single on January 31, 2020, from Eminem's eleventh studio album Music to Be Murdered By (2020). The song was Juice Wrld's first posthumous release following his death in December 2019.",
-              thumbnail: "eminem.jpg",
-              url: "godzilla_eminem.mp3",
+              thumbnail: "assets/covers/eminem.jpg",
+              url: "assets/musics/godzilla_eminem.mp3",
             },
             {
               title: "Thank you",
               artist: "Dido",
               description:
                 "Thank You is a song written and performed by English singer-songwriter Dido. The song made its first appearance in 1998, on the soundtrack of the movie Sliding Doors. It was later included on Dido's 1999 debut album No Angel, becoming the album's biggest hit.",
-              thumbnail: "dido.jpg",
-              url: "thank_you_dido.mp3",
+              thumbnail: "assets/covers/dido.jpg",
+              url: "assets/musics/thank_you_dido.mp3",
             },
             {
               title: "Creep",
               artist: "Radiohead",
               description:
                 "Creep is the debut single by English alternative rock band Radiohead, released on 21 September 1992. It appeared on their debut studio album, Pablo Honey (1993). Creep was not initially a chart success, but it became a worldwide hit after being re-released in 1993. Radiohead took elements from the Hollies' 1972 song The Air That I Breathe; following legal action, Albert Hammond and Mike Hazlewood are credited as cowriters.",
-              thumbnail: "radiohead.jpg",
-              url: "creep_radiohead.mp3",
+              thumbnail: "assets/covers/radiohead.jpg",
+              url: "assets/musics/creep_radiohead.mp3",
             },
           ],
         })

@@ -1,8 +1,8 @@
 <template>
   <div>
     <h4 class="pl-3 mt-3">My playlist</h4>
-    <ul>
-      <li
+    <v-list name="My playlist" class="ma-3">
+      <v-item
         class="d-flex justify-space-between align-center"
         v-for="(track, index) in playlist"
         :key="index"
@@ -11,12 +11,10 @@
           @click="playMusic(track)"
           :class="track == music ? 'active' : ''"
         >
-          {{ track.title }} - <em>{{ track.artist }}</em>
+          {{ track.title }}&nbsp;-<em class="ml-1">{{ track.artist }}</em>
         </button>
-        <!-- <v-btn :to="'/portfolio/' + track.artist">Show</v-btn> -->
-        <!-- <v-btn @click="toPortfolio">Show 2</v-btn> -->
-      </li>
-    </ul>
+      </v-item>
+    </v-list>
   </div>
 </template>
 
@@ -31,9 +29,6 @@ export default {
     playMusic(track) {
       this.$emit("playMusic", track);
     },
-    // toPortfolio() {
-    //   this.$router.push("/portfolio/Dido");
-    // },
   },
 };
 </script>

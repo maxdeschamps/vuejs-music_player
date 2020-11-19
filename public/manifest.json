@@ -1,0 +1,38 @@
+{
+    "name": "SpotiVue",
+    "short_name": "SpotiVue",
+    "orientation": "portrait",
+    "lang": "fr",
+    "dir": "ltr",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#000",
+    "theme_color": "#9ACD32",
+    "icons": [
+        {
+            "src": "/images/vuejsx16.png",
+            "sizes": "16x16",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/images/vuejsx57.png",
+            "sizes": "57x57",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/images/vuejsx144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/images/vuejsx512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ]
+}

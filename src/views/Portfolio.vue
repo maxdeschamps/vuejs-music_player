@@ -10,7 +10,7 @@
 export default {
   name: "Portfolio",
   created() {
-    console.log(this.$route.params);
+    // console.log(this.$route.params);
   },
   methods: {
     showComments() {

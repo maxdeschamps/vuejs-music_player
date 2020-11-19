@@ -1,12 +1,18 @@
 <template>
-  <div>
-    <div @click="changeTime" class="progressBar">
-      <span
-        class="progressCurrent"
-        :style="{ width: progressBar + '%' }"
-      ></span>
-    </div>
-    <div class="d-flex justify-space-between align-center ma-1">
+  <div class="timeContainer">
+    <v-slider
+      class="timeSlider"
+      @change="onChange($event)"
+      v-model="progressBar"
+      min="0"
+      max="100"
+      step="0.1"
+      color="#9ACD32"
+      track-color="#fff"
+      thumb-color="#9ACD32"
+      hide-details
+    ></v-slider>
+    <div class="d-flex justify-space-between align-center mx-4">
       <span class="time">{{ formatedCurrentDuration }}</span>
       <span @click="handleRestTime" class="time">
         <span v-if="totalDuration">{{ formatedTotalDuration }}</span>
@@ -31,47 +37,24 @@ export default {
     handleRestTime() {
       this.totalDuration = !this.totalDuration;
     },
-    changeTime(event) {
-      const parentPosition = this.getPosition(event.target);
-      const position = event.clientX - parentPosition.x;
-      const widthBar =
-        event.target.tagName == "SPAN"
-          ? event.target.parentElement.scrollWidth
-          : event.target.scrollWidth;
-
-      if (!widthBar || widthBar == 0) {
-        return;
-      }
-      const pourcentage = position / widthBar;
-
-      const musicPosition = this.duration.totalDuration * pourcentage;
-
+    onChange(event) {
+      const musicPosition = (this.duration.totalDuration * event) / 100;
       this.$emit("changeTime", musicPosition);
-    },
-    getPosition(el) {
-      var xPos = 0;
-
-      while (el) {
-        xPos +=
-          el.tagName == "BODY"
-            ? el.offsetLeft + el.clientLeft
-            : el.offsetLeft - el.scrollLeft + el.clientLeft;
-        el = el.offsetParent;
-      }
-      return { x: xPos };
     },
     formatedNumber(n) {
       return n > 9 ? "" + n : "0" + n;
     },
   },
   computed: {
-    progressBar() {
-      if (this.duration.totalDuration) {
+    progressBar: {
+      get: function () {
         return (
           (this.duration.currentDuration / this.duration.totalDuration) * 100
         );
-      }
-      return 0;
+      },
+      set: function () {
+        return 0;
+      },
     },
     formatedCurrentDuration() {
       const formatedCurrentDuration = this.duration.currentDuration
@@ -107,24 +90,18 @@ export default {
 </script>
 
 <style scoped>
-.progressBar {
-  position: relative;
-  width: 100%;
-  height: 6px;
-  background-color: white;
-  overflow: hidden;
-}
-
-.progressCurrent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: black;
-  width: 0;
-  height: 100%;
-}
-
 span.time {
   font-size: 0.8rem;
+}
+
+.timeContainer {
+  margin-left: -8px;
+  width: calc(100% + 16px);
+}
+
+.timeSlider {
+  margin: 0;
+  padding: 0;
+  margin-top: -15px;
 }
 </style>

@@ -8,7 +8,7 @@
       ></v-progress-linear>
     </template>
 
-    <v-img height="250" :src="require('@/assets/covers/'+music.thumbnail)"></v-img>
+    <v-img height="250" :src="require('@/' + music.thumbnail)"></v-img>
 
     <ProgressBar @changeTime="changeTime" :duration="duration" />
 

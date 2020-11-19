@@ -2,7 +2,7 @@
   <div>
     <v-img
       class="bodyImage"
-      :src="require('@/assets/covers/' + playlist[music].thumbnail)"
+      :src="require('@/' + playlist[music].thumbnail)"
     ></v-img>
     <v-main>
       <v-container>
@@ -19,6 +19,7 @@
           :duration="duration"
           :sound="sound"
         />
+        <v-btn @click="toAddSong">Add a song</v-btn>
       </v-container>
     </v-main>
   </div>
@@ -107,9 +108,7 @@ export default {
       this.audio.remove();
     },
     createMusic() {
-      this.audio = new Audio(
-        require("@/assets/musics/" + this.playlist[this.music].url)
-      );
+      this.audio = new Audio(require("@/" + this.playlist[this.music].url));
       if (this.play) {
         this.audio.play();
       }
@@ -123,16 +122,23 @@ export default {
       this.audio.addEventListener("ended", this.changeMusic);
       this.audio.addEventListener("timeupdate", this.progressMusic);
     },
+    toAddSong() {
+      this.deleteMusic();
+      this.$router.push("/add-song");
+    },
   },
   mounted() {
     this.createMusic();
   },
   watch: {
     music() {
-      this.$emit("backgroundImage", this.playlist[this.music].thumbnail);
+      this.$emit("backgroundImage", "@/" + this.playlist[this.music].thumbnail);
     },
     audio() {
       this.duration.totalDuration = this.audio.duration;
+    },
+    $route(Home, AddSong) {
+      this.deleteMusic();
     },
   },
 };
