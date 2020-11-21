@@ -1,9 +1,5 @@
 <template>
   <v-app>
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/add-song">Add a song</router-link>
-    </div> -->
     <router-view />
   </v-app>
 </template>

@@ -4,14 +4,16 @@
     <v-list name="My playlist" class="ma-3">
       <v-item
         class="d-flex justify-space-between align-center"
-        v-for="(track, index) in playlist"
+        v-for="(track, index) in musics"
         :key="index"
       >
         <button
           @click="playMusic(track)"
           :class="track == music ? 'active' : ''"
         >
-          {{ track.title }}&nbsp;-<em class="ml-1">{{ track.artist }}</em>
+          {{ track.title }}&nbsp;-<em class="ml-1">{{
+            artists[findArtist(track.artist)].name
+          }}</em>
         </button>
       </v-item>
     </v-list>
@@ -22,12 +24,16 @@
 export default {
   name: "List",
   props: {
-    playlist: Array,
+    musics: Array,
+    artists: Array,
     music: Object,
   },
   methods: {
     playMusic(track) {
       this.$emit("playMusic", track);
+    },
+    findArtist(artistId) {
+      return this.artists.findIndex((artist) => artist.id === artistId);
     },
   },
 };

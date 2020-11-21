@@ -20,7 +20,11 @@
           <v-card-title class="py-0">{{ music.title }}</v-card-title>
 
           <v-card-text class="py-0">
-            <em>{{ music.artist }}</em>
+            <em>
+              <button @click="toArtist">
+                {{ artists[findArtist(music.artist)].name }}
+              </button>
+            </em>
           </v-card-text>
         </div>
       </div>
@@ -39,7 +43,12 @@
 
     <hr />
 
-    <List @playMusic="playMusic" :playlist="playlist" :music="music" />
+    <List
+      @playMusic="playMusic"
+      :musics="musics"
+      :artists="artists"
+      :music="music"
+    />
   </v-card>
 </template>
 
@@ -47,15 +56,16 @@
 import List from "./List";
 import ProgressBar from "./ProgressBar";
 import SoundController from "./SoundController";
-import Play from "./svg/Play";
-import Previous from "./svg/Previous";
-import Next from "./svg/Next";
+import Play from "../svg/Play";
+import Previous from "../svg/Previous";
+import Next from "../svg/Next";
 export default {
   name: "Player",
   props: {
     music: Object,
     play: Boolean,
-    playlist: Array,
+    musics: Array,
+    artists: Array,
     duration: Object,
     sound: Object,
   },
@@ -85,6 +95,15 @@ export default {
     },
     changeSound(volume) {
       this.$emit("changeSound", volume);
+    },
+    findArtist(artistId) {
+      return this.artists.findIndex((artist) => artist.id === artistId);
+    },
+    toArtist() {
+      this.$emit("deleteMusic");
+      const artistId = this.findArtist(this.music.artist);
+      const artistName = this.artists[artistId].name;
+      this.$router.push("/artist/" + artistName);
     },
   },
 };

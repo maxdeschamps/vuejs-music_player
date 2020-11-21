@@ -2,7 +2,7 @@
   <div>
     <v-img
       class="bodyImage"
-      :src="require('@/' + playlist[music].thumbnail)"
+      :src="require('@/' + musics[music].thumbnail)"
     ></v-img>
     <v-main>
       <v-container>
@@ -13,27 +13,29 @@
           @changeTime="changeTime"
           @handleSound="handleSound"
           @changeSound="changeSound"
-          :music="playlist[music]"
+          @deleteMusic="deleteMusic"
+          :music="musics[music]"
           :play="play"
-          :playlist="playlist"
+          :musics="musics"
+          :artists="artists"
           :duration="duration"
           :sound="sound"
         />
-        <v-btn @click="toAddSong">Add a song</v-btn>
       </v-container>
     </v-main>
   </div>
 </template>
 
 <script>
-import Player from "./Player";
+import Player from "./player/Player";
 export default {
   name: "Spotify",
   components: {
     Player,
   },
-  props: {
-    playlist: Array,
+  created() {
+    this.musics = JSON.parse(localStorage.getItem("data")).musics;
+    this.artists = JSON.parse(localStorage.getItem("data")).artists;
   },
   data() {
     return {
@@ -48,6 +50,7 @@ export default {
         muted: false,
         volume: 1,
       },
+      player: [],
     };
   },
   methods: {
@@ -55,11 +58,11 @@ export default {
       this.deleteMusic();
 
       const newPosition = next
-        ? this.music + 1 == this.playlist.length
+        ? this.music + 1 == this.musics.length
           ? 0
           : this.music + 1
         : this.music == 0
-        ? this.playlist.length - 1
+        ? this.musics.length - 1
         : this.music - 1;
       this.music = newPosition;
 
@@ -68,7 +71,7 @@ export default {
     playMusic(track) {
       this.play = true;
 
-      const newPostion = this.playlist.indexOf(track);
+      const newPostion = this.musics.indexOf(track);
 
       if (this.music != newPostion) {
         this.deleteMusic();
@@ -108,7 +111,7 @@ export default {
       this.audio.remove();
     },
     createMusic() {
-      this.audio = new Audio(require("@/" + this.playlist[this.music].url));
+      this.audio = new Audio(require("@/" + this.musics[this.music].url));
       if (this.play) {
         this.audio.play();
       }
@@ -122,23 +125,16 @@ export default {
       this.audio.addEventListener("ended", this.changeMusic);
       this.audio.addEventListener("timeupdate", this.progressMusic);
     },
-    toAddSong() {
-      this.deleteMusic();
-      this.$router.push("/add-song");
-    },
   },
   mounted() {
     this.createMusic();
   },
   watch: {
     music() {
-      this.$emit("backgroundImage", "@/" + this.playlist[this.music].thumbnail);
+      this.$emit("backgroundImage", "@/" + this.musics[this.music].thumbnail);
     },
     audio() {
       this.duration.totalDuration = this.audio.duration;
-    },
-    $route(Home, AddSong) {
-      this.deleteMusic();
     },
   },
 };

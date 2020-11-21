@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Sound from "./svg/Sound";
+import Sound from "../svg/Sound";
 export default {
   name: "SoundController",
   props: {
