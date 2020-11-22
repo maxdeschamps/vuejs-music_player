@@ -10,7 +10,7 @@
       :size="50"
       :valueDisplayFunction="
         (v) => {
-          return v * 100;
+          return parseInt(v * 100);
         }
       "
       primary-color="#9ACD32"

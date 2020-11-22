@@ -49,6 +49,7 @@ export default {
   created() {
     if (!localStorage.getItem("data")) {
       localStorage.setItem("data", JSON.stringify(data));
+      this.$router.go();
     }
   },
   data() {
