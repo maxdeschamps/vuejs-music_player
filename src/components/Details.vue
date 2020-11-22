@@ -7,8 +7,13 @@
     </template>
 
     <v-card>
-      <v-card-title class="flex-title headline lighten-2">
-        <span>
+      <v-card-title class="flex-header headline lighten-2">
+        <div class="flex-title">
+          <img
+            class="thumbnail-image mr-2"
+            :src="require('@/' + music.thumbnail)"
+          />
+
           {{ music.title }}
           &nbsp;-
           <router-link
@@ -17,7 +22,7 @@
           >
             {{ artist.name }}
           </router-link>
-        </span>
+        </div>
 
         <Like @handleLike="handleLike(music.id)" :like="music.liked" />
       </v-card-title>
@@ -74,9 +79,20 @@ a.router-link-exact-active {
   color: yellowgreen;
 }
 
-.flex-title {
+.flex-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.flex-title {
+  display: flex;
+  align-items: center;
+}
+
+.thumbnail-image {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  object-position: center;
 }
 </style>

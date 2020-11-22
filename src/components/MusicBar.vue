@@ -2,10 +2,18 @@
   <v-main class="spotify">
     <div class="flex-bar">
       <div class="flex-music">
-        <img
-          class="thumbnail-image"
-          :src="require('@/' + musics[music].thumbnail)"
-        />
+        <figure class="thumbnail-figure">
+          <img
+            class="thumbnail-image"
+            :src="require('@/' + musics[music].thumbnail)"
+          />
+          <figcaption>
+            <Like
+              @handleLike="handleLike(musics[music].id)"
+              :like="musics[music].liked"
+            />
+          </figcaption>
+        </figure>
 
         <div class="d-flex flex-column text-left ml-4">
           <h3 class="py-0">{{ musics[music].title }}</h3>
@@ -52,6 +60,7 @@
 import Play from "./control/Play";
 import Previous from "./control/Previous";
 import Next from "./control/Next";
+import Like from "./control/Like";
 import ProgressBar from "./player/ProgressBar";
 import SoundController from "./player/SoundController";
 
@@ -71,6 +80,7 @@ export default {
     Play,
     Previous,
     Next,
+    Like,
   },
   methods: {
     changeMusic(next = true) {
@@ -87,6 +97,9 @@ export default {
     },
     changeSound(volume) {
       this.$emit("changeSound", volume);
+    },
+    handleLike(trackId) {
+      this.$emit("handleLike", trackId);
     },
     findArtist(artistId) {
       return this.artists.findIndex((artist) => artist.id === artistId);
@@ -108,11 +121,23 @@ export default {
   display: flex;
 }
 
-.flex-music > .thumbnail-image {
+.flex-music > .thumbnail-figure {
+  position: relative;
   width: 50px;
   height: 50px;
+}
+
+.flex-music > .thumbnail-figure > .thumbnail-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.flex-music > .thumbnail-figure > figcaption {
+  position: absolute;
+  top: -5px;
+  right: -5px;
 }
 
 .flex-controller {
