@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div id="nav">
-      <Spotify
+      <MusicBar
         @changeMusic="changeMusic"
         @handleMusic="handleMusic"
         @changeTime="changeTime"
@@ -9,6 +9,8 @@
         @changeSound="changeSound"
         @deleteMusic="deleteMusic"
         @handleLike="handleLike"
+        :musics="musics"
+        :artists="artists"
         :music="music"
         :play="play"
         :duration="duration"
@@ -32,13 +34,13 @@
 </template>
 
 <script>
-import Spotify from "@/components/Spotify.vue";
+import MusicBar from "@/components/MusicBar.vue";
 import data from "../public/data.json";
 
 export default {
   name: "App",
   components: {
-    Spotify,
+    MusicBar,
   },
   created() {
     if (!localStorage.getItem("data")) {

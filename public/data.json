@@ -20,12 +20,21 @@
         },
         {
             "id": 3,
+            "title": "Stan",
+            "artist": 1,
+            "description": "Creep is the debut single by English alternative rock band Radiohead, released on 21 September 1992. It appeared on their debut studio album, Pablo Honey (1993). Creep was not initially a chart success, but it became a worldwide hit after being re-released in 1993. Radiohead took elements from the Hollies' 1972 song The Air That I Breathe; following legal action, Albert Hammond and Mike Hazlewood are credited as cowriters.",
+            "thumbnail": "assets/covers/eminem_stan.jpg",
+            "url": "assets/musics/stan_eminem.mp3",
+            "liked": false
+        },
+        {
+            "id": 4,
             "title": "Creep",
             "artist": 3,
             "description": "Creep is the debut single by English alternative rock band Radiohead, released on 21 September 1992. It appeared on their debut studio album, Pablo Honey (1993). Creep was not initially a chart success, but it became a worldwide hit after being re-released in 1993. Radiohead took elements from the Hollies' 1972 song The Air That I Breathe; following legal action, Albert Hammond and Mike Hazlewood are credited as cowriters.",
             "thumbnail": "assets/covers/radiohead.jpg",
             "url": "assets/musics/creep_radiohead.mp3",
-            "liked": false
+            "liked": true
         }
     ],
     "artists": [

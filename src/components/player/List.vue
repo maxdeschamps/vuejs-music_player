@@ -9,19 +9,36 @@
         @click="playMusic(track.id)"
         :class="track.id == music.id ? 'active' : ''"
       >
-        <img class="thumbnail-image" :src="require('@/' + track.thumbnail)" />
+        <img
+          class="thumbnail-image mr-1"
+          :src="require('@/' + track.thumbnail)"
+        />
 
         {{ track.title }}&nbsp;-
-        <em class="ml-1">{{ artists[findArtist(track.artist)].name }}</em>
+        <em>{{ artists[findArtist(track.artist)].name }}</em>
       </button>
 
-      <Like :like="track.liked" @handleLike="handleLike(track.id)" />
+      <div class="d-flex">
+        <Like
+          class="mr-1"
+          @handleLike="handleLike(track.id)"
+          :like="track.liked"
+        />
+        <OnHold class="mr-1" @onHoldPlaylist="onHoldPlaylist" />
+        <Details
+          @handleLike="handleLike"
+          :music="track"
+          :artist="artists[findArtist(track.artist)]"
+        />
+      </div>
     </v-item-group>
   </v-list>
 </template>
 
 <script>
 import Like from "../control/Like";
+import OnHold from "../control/OnHold";
+import Details from "../Details";
 
 export default {
   name: "List",
@@ -32,6 +49,8 @@ export default {
   },
   components: {
     Like,
+    OnHold,
+    Details,
   },
   methods: {
     playMusic(trackId) {
@@ -39,6 +58,9 @@ export default {
     },
     handleLike(trackId) {
       this.$emit("handleLike", trackId);
+    },
+    onHoldPlaylist() {
+      // this.$emit("onHoldPlaylist");
     },
     findArtist(artistId) {
       return this.artists.findIndex((artist) => artist.id === artistId);
