@@ -1,154 +1,168 @@
 <template>
-  <div>
-    <v-img
-      class="bodyImage"
-      :src="require('@/' + musics[music].thumbnail)"
-    ></v-img>
-    <v-main>
-      <v-container>
-        <Player
-          @changeMusic="changeMusic"
-          @playMusic="playMusic"
-          @handleMusic="handleMusic"
-          @changeTime="changeTime"
-          @handleSound="handleSound"
-          @changeSound="changeSound"
-          @deleteMusic="deleteMusic"
-          :music="musics[music]"
-          :play="play"
-          :musics="musics"
-          :artists="artists"
-          :duration="duration"
-          :sound="sound"
+  <v-main class="spotify">
+    <div class="flex-bar">
+      <div class="flex-music">
+        <img
+          class="thumbnail-image"
+          :src="require('@/' + musics[music].thumbnail)"
         />
-      </v-container>
-    </v-main>
-  </div>
+
+        <div class="d-flex flex-column text-left ml-4">
+          <h3 class="py-0">{{ musics[music].title }}</h3>
+
+          <em class="py-0">
+            <router-link
+              :to="'/artist/' + artists[findArtist(musics[music].artist)].name"
+            >
+              {{ artists[findArtist(musics[music].artist)].name }}
+            </router-link>
+          </em>
+        </div>
+      </div>
+
+      <div class="flex-controller">
+        <div class="flex-button">
+          <Play @handleMusic="handleMusic" :play="play" />
+          <Previous @changeMusic="changeMusic" />
+          <Next @changeMusic="changeMusic" />
+        </div>
+
+        <div class="flex-control-bar">
+          <ProgressBar
+            class="progress-bar"
+            @changeTime="changeTime"
+            :duration="duration"
+          />
+          <SoundController
+            class="sound-bar"
+            @handleSound="handleSound"
+            @changeSound="changeSound"
+            :sound="sound"
+          />
+        </div>
+      </div>
+    </div>
+  </v-main>
 </template>
 
 <script>
-import Player from "./player/Player";
+import Play from "./control/Play";
+import Previous from "./control/Previous";
+import Next from "./control/Next";
+import ProgressBar from "./player/ProgressBar";
+import SoundController from "./player/SoundController";
+
 export default {
   name: "Spotify",
-  components: {
-    Player,
-  },
   created() {
     this.musics = JSON.parse(localStorage.getItem("data")).musics;
     this.artists = JSON.parse(localStorage.getItem("data")).artists;
   },
-  data() {
-    return {
-      music: 0,
-      audio: "",
-      play: false,
-      duration: {
-        currentDuration: 0,
-        totalDuration: 0,
-      },
-      sound: {
-        muted: false,
-        volume: 1,
-      },
-      player: [],
-    };
+  props: {
+    music: Number,
+    play: Boolean,
+    duration: Object,
+    sound: Object,
+  },
+  components: {
+    ProgressBar,
+    SoundController,
+    Play,
+    Previous,
+    Next,
   },
   methods: {
     changeMusic(next = true) {
-      this.deleteMusic();
-
-      const newPosition = next
-        ? this.music + 1 == this.musics.length
-          ? 0
-          : this.music + 1
-        : this.music == 0
-        ? this.musics.length - 1
-        : this.music - 1;
-      this.music = newPosition;
-
-      this.createMusic();
-    },
-    playMusic(track) {
-      this.play = true;
-
-      const newPostion = this.musics.indexOf(track);
-
-      if (this.music != newPostion) {
-        this.deleteMusic();
-
-        this.music = newPostion;
-
-        this.createMusic();
-      }
+      this.$emit("changeMusic", next);
     },
     handleMusic() {
-      this.play = !this.play;
-      this.play ? this.audio.play() : this.audio.pause();
+      this.$emit("handleMusic");
     },
     changeTime(time) {
-      this.audio.currentTime = time;
+      this.$emit("changeTime", time);
     },
     handleSound() {
-      this.sound.muted = !this.sound.muted;
-      this.audio.muted = this.sound.muted;
+      this.$emit("handleSound");
     },
     changeSound(volume) {
-      this.sound.volume = volume;
-      this.audio.volume = this.sound.volume;
+      this.$emit("changeSound", volume);
     },
-    progressMusic() {
-      this.duration.currentDuration = Math.round(this.audio.currentTime);
-      this.currentDuration = Math.round(this.audio.currentTime);
-    },
-    deleteMusic() {
-      this.audio.pause();
-
-      this.duration.currentDuration = 0;
-
-      this.audio.removeEventListener("ended", this.changeMusic);
-      this.audio.removeEventListener("timeupdate", this.progressMusic);
-
-      this.audio.remove();
-    },
-    createMusic() {
-      this.audio = new Audio(require("@/" + this.musics[this.music].url));
-      if (this.play) {
-        this.audio.play();
-      }
-      this.audio.muted = this.sound.muted;
-      this.audio.volume = this.sound.volume;
-
-      const localThis = this;
-      this.audio.addEventListener("loadedmetadata", function () {
-        localThis.duration.totalDuration = Math.round(localThis.audio.duration);
-      });
-      this.audio.addEventListener("ended", this.changeMusic);
-      this.audio.addEventListener("timeupdate", this.progressMusic);
-    },
-  },
-  mounted() {
-    this.createMusic();
-  },
-  watch: {
-    music() {
-      this.$emit("backgroundImage", "@/" + this.musics[this.music].thumbnail);
-    },
-    audio() {
-      this.duration.totalDuration = this.audio.duration;
+    findArtist(artistId) {
+      return this.artists.findIndex((artist) => artist.id === artistId);
     },
   },
 };
 </script>
 
 <style scoped>
-.bodyImage {
-  position: absolute;
-  top: 0;
-  left: 0;
+.flex-bar {
   width: 100%;
-  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-music {
+  width: 100%;
+  max-width: 200px;
+  display: flex;
+}
+
+.flex-music > .thumbnail-image {
+  width: 50px;
+  height: 50px;
   object-fit: cover;
   object-position: center;
-  filter: blur(4px) brightness(0.75);
+}
+
+.flex-controller {
+  width: calc(100% - 200px);
+  display: flex;
+}
+
+.flex-controller > .flex-button {
+  display: flex;
+}
+
+.flex-control-bar {
+  display: flex;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.flex-control-bar > .progress-bar {
+  width: 100%;
+}
+
+.flex-control-bar > .sound-bar {
+  width: 100%;
+  max-width: 250px;
+}
+
+@media screen and (max-width: 700px) {
+  .flex-bar {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .flex-controller {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .flex-controller > .flex-button {
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .flex-control-bar {
+    flex-direction: column;
+    margin-left: 0;
+  }
+
+  .flex-control-bar > .sound-bar {
+    max-width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 }
 </style>

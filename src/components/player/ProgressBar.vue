@@ -95,13 +95,11 @@ span.time {
 }
 
 .timeContainer {
-  margin-left: -8px;
-  width: calc(100% + 16px);
+  width: 100%;
 }
 
 .timeSlider {
   margin: 0;
   padding: 0;
-  margin-top: -15px;
 }
 </style>

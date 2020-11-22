@@ -9,19 +9,30 @@
         ></v-progress-linear>
       </template>
 
-      <v-img height="250" :src="require('@/' + artists[artist].image)"></v-img>
+      <v-img
+        height="250"
+        :src="
+          require('@/' + artists[findArtist(this.$route.params.artist)].image)
+        "
+      ></v-img>
 
       <v-card-actions class="d-flex justify-space-between align-center py-2">
         <div class="d-flex">
           <div class="d-flex flex-column text-left">
-            <v-card-title class="py-0">{{ artists[artist].name }}</v-card-title>
+            <v-card-title class="py-0">{{
+              artists[findArtist(this.$route.params.artist)].name
+            }}</v-card-title>
           </div>
         </div>
       </v-card-actions>
 
       <hr />
 
-      <!-- <List @playMusic="playMusic" :playlist="playlist" :music="music" /> -->
+      <List
+        :musics="findMusicsByArtist()"
+        :music="music"
+        @playMusic="playMusic"
+      />
     </v-card>
 
     <v-btn :to="'/'">Return to playlist</v-btn>
@@ -29,18 +40,36 @@
 </template>
 
 <script>
+import List from "@/components/player/List.vue";
+
 export default {
   name: "Artist",
+  components: {
+    List,
+  },
+  props: {
+    music: Object,
+  },
   created() {
     this.musics = JSON.parse(localStorage.getItem("data")).musics;
     this.artists = JSON.parse(localStorage.getItem("data")).artists;
-    this.artist = this.findArtist(this.$route.params.artist);
   },
   methods: {
+    playMusic(trackId) {
+      this.$emit("playMusic", trackId);
+    },
     findArtist(artistName) {
       return this.artists.findIndex(
         (artist) => artist.name.toLowerCase() === artistName.toLowerCase()
       );
+    },
+    findMusicsByArtist() {
+      return this.musics.filter((music) => {
+        return (
+          music.artist ==
+          this.artists[this.findArtist(this.$route.params.artist)].id
+        );
+      });
     },
   },
 };

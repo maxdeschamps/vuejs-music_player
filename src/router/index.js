@@ -8,12 +8,14 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    props: true
   },
   {
     path: '/artist/:artist',
-    name: 'Music',
-    component: () => import('../views/Artist.vue')
+    name: 'Artist',
+    component: () => import('../views/Artist.vue'),
+    props: true
   }
 ]
 

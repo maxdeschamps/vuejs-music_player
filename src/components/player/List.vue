@@ -1,23 +1,19 @@
 <template>
-  <div>
-    <h4 class="pl-3 mt-3">My playlist</h4>
-    <v-list name="My playlist" class="ma-3">
-      <v-item
-        class="d-flex justify-space-between align-center"
-        v-for="(track, index) in musics"
-        :key="index"
+  <v-list name="My playlist" class="ma-3">
+    <v-item
+      class="d-flex justify-space-between align-center"
+      v-for="track in musics"
+      :key="track.id"
+    >
+      <button
+        @click="playMusic(track.id)"
+        :class="track.id == music.id ? 'active' : ''"
       >
-        <button
-          @click="playMusic(track)"
-          :class="track == music ? 'active' : ''"
-        >
-          {{ track.title }}&nbsp;-<em class="ml-1">{{
-            artists[findArtist(track.artist)].name
-          }}</em>
-        </button>
-      </v-item>
-    </v-list>
-  </div>
+        {{ track.title }}&nbsp;-
+        <em class="ml-1">{{ artists[findArtist(track.artist)].name }}</em>
+      </button>
+    </v-item>
+  </v-list>
 </template>
 
 <script>
@@ -25,12 +21,14 @@ export default {
   name: "List",
   props: {
     musics: Array,
-    artists: Array,
     music: Object,
   },
+  created() {
+    this.artists = JSON.parse(localStorage.getItem("data")).artists;
+  },
   methods: {
-    playMusic(track) {
-      this.$emit("playMusic", track);
+    playMusic(trackId) {
+      this.$emit("playMusic", trackId);
     },
     findArtist(artistId) {
       return this.artists.findIndex((artist) => artist.id === artistId);
