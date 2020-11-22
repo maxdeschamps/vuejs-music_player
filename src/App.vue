@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import MusicBar from "@/components/MusicBar.vue";
 import data from "../public/data.json";
+import MusicBar from "@/components/MusicBar.vue";
 
 export default {
   name: "App",

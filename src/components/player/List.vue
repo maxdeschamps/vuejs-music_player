@@ -38,7 +38,7 @@
 <script>
 import Like from "../control/Like";
 import OnHold from "../control/OnHold";
-import Details from "../Details";
+import Details from "../modal/Details";
 
 export default {
   name: "List",

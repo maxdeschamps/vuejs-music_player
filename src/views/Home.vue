@@ -34,6 +34,16 @@
     <Modal
       @playMusic="playMusic"
       @handleLike="handleLike"
+      @onHoldPlaylist="onHoldPlaylist"
+      :musics="musics"
+      :artists="artists"
+      :music="music"
+    />
+    &nbsp;
+    <Search
+      @playMusic="playMusic"
+      @handleLike="handleLike"
+      @onHoldPlaylist="onHoldPlaylist"
       :musics="musics"
       :artists="artists"
       :music="music"
@@ -43,13 +53,15 @@
 
 <script>
 import List from "@/components/player/List";
-import Modal from "@/components/Modal";
+import Modal from "@/components/modal/Modal";
+import Search from "@/components/modal/Search";
 
 export default {
   name: "Home",
   components: {
     List,
     Modal,
+    Search,
   },
   props: {
     musics: Array,

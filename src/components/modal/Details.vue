@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import Infos from "./control/Infos";
-import Like from "./control/Like";
+import Infos from "../control/Infos";
+import Like from "../control/Like";
 
 export default {
   name: "Details",

@@ -2,21 +2,29 @@
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
       <v-btn color="lighten-2 mb-5" dark v-bind="attrs" v-on="on">
-        Liked musics
+        Search music
       </v-btn>
     </template>
 
     <v-card>
-      <v-card-title class="headline lighten-2">Liked musics</v-card-title>
+      <v-card-title class="headline lighten-2">Search music</v-card-title>
 
       <hr />
 
       <v-card-text>
+        <v-text-field
+          class="mt-2"
+          v-model="search"
+          outlined
+          label="Search musics"
+          prepend-icon="mdi-magnify"
+        ></v-text-field>
+
         <List
           @playMusic="playMusic"
           @handleLike="handleLike"
           @onHoldPlaylist="onHoldPlaylist"
-          :musics="findLikedMusics()"
+          :musics="results"
           :artists="artists"
           :music="music"
         />
@@ -26,12 +34,15 @@
 </template>
 
 <script>
-import List from "./player/List";
+import List from "../player/List";
 
 export default {
-  name: "Modal",
+  name: "Search",
   components: {
     List,
+  },
+  mounted() {
+    this.results = this.searchMusic(this.search);
   },
   props: {
     musics: Array,
@@ -41,6 +52,8 @@ export default {
   data() {
     return {
       dialog: false,
+      search: "",
+      results: [],
     };
   },
   methods: {
@@ -53,8 +66,22 @@ export default {
     onHoldPlaylist(trackId) {
       this.$emit("onHoldPlaylist", trackId);
     },
-    findLikedMusics() {
-      return this.musics.filter((music) => music.liked);
+    findArtist(artistId) {
+      return this.artists.findIndex((artist) => artist.id === artistId);
+    },
+    searchMusic(value) {
+      const musicsOrdered = this.musics.slice();
+      return musicsOrdered.filter(
+        (music) =>
+          music.title.startsWith(value) ||
+          music.description.includes(value) ||
+          this.artists[this.findArtist(music.artist)].name.startsWith(value)
+      );
+    },
+  },
+  watch: {
+    search(value) {
+      this.results = this.searchMusic(value);
     },
   },
 };
