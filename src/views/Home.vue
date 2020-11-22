@@ -31,7 +31,7 @@
       />
     </v-card>
 
-    <Modal
+    <LikedMusics
       @playMusic="playMusic"
       @handleLike="handleLike"
       @onHoldPlaylist="onHoldPlaylist"
@@ -53,14 +53,14 @@
 
 <script>
 import List from "@/components/player/List";
-import Modal from "@/components/modal/Modal";
+import LikedMusics from "@/components/modal/LikedMusics";
 import Search from "@/components/modal/Search";
 
 export default {
   name: "Home",
   components: {
     List,
-    Modal,
+    LikedMusics,
     Search,
   },
   props: {

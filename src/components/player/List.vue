@@ -24,7 +24,11 @@
           @handleLike="handleLike(track.id)"
           :like="track.liked"
         />
-        <OnHold class="mr-1" @onHoldPlaylist="onHoldPlaylist(track.id)" />
+        <OnHold
+          class="mr-1"
+          @onHoldPlaylist="onHoldPlaylist(track.id)"
+          :isPlayed="track.id == music.id"
+        />
         <Details
           @handleLike="handleLike"
           :music="track"

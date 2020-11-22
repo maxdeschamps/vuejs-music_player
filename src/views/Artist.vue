@@ -28,6 +28,12 @@
 
       <hr />
 
+      <v-card-text>
+        {{ artists[findArtist(this.$route.params.artist)].description }}
+      </v-card-text>
+
+      <hr />
+
       <List
         @playMusic="playMusic"
         @handleLike="handleLike"

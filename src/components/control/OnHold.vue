@@ -1,20 +1,25 @@
 <template>
   <button @click="onHoldPlaylist">
-    <svg-icon type="mdi" :path="iconOnHold"></svg-icon>
+    <svg-icon v-if="isPlayed" type="mdi" :path="iconPlay"></svg-icon>
+    <svg-icon v-else type="mdi" :path="iconOnHold"></svg-icon>
   </button>
 </template>
 
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiPlaylistPlay } from "@mdi/js";
+import { mdiPlaylistPlus, mdiPlaylistPlay } from "@mdi/js";
 export default {
   name: "OnHold",
   components: {
     SvgIcon,
   },
+  props: {
+    isPlayed: Boolean,
+  },
   data() {
     return {
-      iconOnHold: mdiPlaylistPlay,
+      iconOnHold: mdiPlaylistPlus,
+      iconPlay: mdiPlaylistPlay,
     };
   },
   methods: {

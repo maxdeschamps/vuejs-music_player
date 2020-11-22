@@ -41,17 +41,20 @@
         {
             "id": 1,
             "name": "Eminem",
-            "image": "assets/artists/eminem.jpg"
+            "image": "assets/artists/eminem.jpg",
+            "description": "Marshall Bruce Mathers III (born October 17, 1972), known professionally as Eminem, is an American rapper, songwriter, and record producer."
         },
         {
             "id": 2,
             "name": "Dido",
-            "image": "assets/artists/dido.jpg"
+            "image": "assets/artists/dido.jpg",
+            "description": "Florian Cloud de Bounevialle O'Malley Armstrong (born 25 December 1971), known professionally as Dido, is an English singer and songwriter."
         },
         {
             "id": 3,
             "name": "Radiohead",
-            "image": "assets/artists/radiohead.jpg"
+            "image": "assets/artists/radiohead.jpg",
+            "description": "Radiohead are an English rock band formed in Abingdon, Oxfordshire, in 1985. The band consists of Thom Yorke (vocals, guitar, piano, keyboards), brothers Jonny Greenwood (lead guitar, keyboards, other instruments) and Colin Greenwood (bass), Ed O'Brien (guitar, backing vocals) and Philip Selway (drums, percussion)."
         }
     ]
 }

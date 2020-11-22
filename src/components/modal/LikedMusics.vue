@@ -29,7 +29,7 @@
 import List from "../player/List";
 
 export default {
-  name: "Modal",
+  name: "LikedMusics",
   components: {
     List,
   },
