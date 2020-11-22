@@ -8,6 +8,7 @@
         @handleSound="handleSound"
         @changeSound="changeSound"
         @deleteMusic="deleteMusic"
+        @handleLike="handleLike"
         :music="music"
         :play="play"
         :duration="duration"
@@ -19,7 +20,13 @@
         class="bodyImage"
         :src="require('@/' + musics[music].thumbnail)"
       ></v-img>
-      <router-view :music="musics[music]" @playMusic="playMusic" />
+      <router-view
+        @playMusic="playMusic"
+        @handleLike="handleLike"
+        :musics="musics"
+        :artists="artists"
+        :music="musics[music]"
+      />
     </div>
   </v-app>
 </template>
@@ -37,8 +44,6 @@ export default {
     if (!localStorage.getItem("data")) {
       localStorage.setItem("data", JSON.stringify(data));
     }
-    this.musics = JSON.parse(localStorage.getItem("data")).musics;
-    this.artists = JSON.parse(localStorage.getItem("data")).artists;
   },
   data() {
     return {
@@ -54,6 +59,8 @@ export default {
         volume: 1,
       },
       playlist: [0],
+      musics: JSON.parse(localStorage.getItem("data")).musics,
+      artists: JSON.parse(localStorage.getItem("data")).artists,
     };
   },
   methods: {
@@ -73,7 +80,7 @@ export default {
     },
     playMusic(trackId) {
       this.play = true;
-      
+
       const newPosition = this.findMusic(trackId);
 
       if (this.music != newPosition) {
@@ -127,6 +134,13 @@ export default {
       });
       this.audio.addEventListener("ended", this.changeMusic);
       this.audio.addEventListener("timeupdate", this.progressMusic);
+    },
+    handleLike(trackId) {
+      const position = this.findMusic(trackId);
+      this.musics[position].liked = !this.musics[position].liked;
+
+      data.musics = this.musics;
+      localStorage.setItem("data", JSON.stringify(data));
     },
     findMusic(musicId) {
       return this.musics.findIndex((music) => music.id === musicId);

@@ -29,18 +29,20 @@
       <hr />
 
       <List
-        :musics="findMusicsByArtist()"
-        :music="music"
         @playMusic="playMusic"
+        @handleLike="handleLike"
+        :musics="findMusicsByArtist()"
+        :artists="artists"
+        :music="music"
       />
     </v-card>
 
-    <v-btn :to="'/'">Return to playlist</v-btn>
+    <v-btn :to="'/'" class="lighten-2 mb-5">Return to playlist</v-btn>
   </v-item-group>
 </template>
 
 <script>
-import List from "@/components/player/List.vue";
+import List from "@/components/player/List";
 
 export default {
   name: "Artist",
@@ -48,15 +50,16 @@ export default {
     List,
   },
   props: {
+    musics: Array,
+    artists: Array,
     music: Object,
-  },
-  created() {
-    this.musics = JSON.parse(localStorage.getItem("data")).musics;
-    this.artists = JSON.parse(localStorage.getItem("data")).artists;
   },
   methods: {
     playMusic(trackId) {
       this.$emit("playMusic", trackId);
+    },
+    handleLike(trackId) {
+      this.$emit("handleLike", trackId);
     },
     findArtist(artistName) {
       return this.artists.findIndex(
@@ -64,12 +67,11 @@ export default {
       );
     },
     findMusicsByArtist() {
-      return this.musics.filter((music) => {
-        return (
+      return this.musics.filter(
+        (music) =>
           music.artist ==
           this.artists[this.findArtist(this.$route.params.artist)].id
-        );
-      });
+      );
     },
   },
 };
