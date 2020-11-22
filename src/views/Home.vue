@@ -24,7 +24,8 @@
       <List
         @playMusic="playMusic"
         @handleLike="handleLike"
-        :musics="musics"
+        @onHoldPlaylist="onHoldPlaylist"
+        :musics="musicsOrdered()"
         :artists="artists"
         :music="music"
       />
@@ -54,6 +55,7 @@ export default {
     musics: Array,
     artists: Array,
     music: Object,
+    playlist: Array,
   },
   methods: {
     playMusic(trackId) {
@@ -61,6 +63,16 @@ export default {
     },
     handleLike(trackId) {
       this.$emit("handleLike", trackId);
+    },
+    onHoldPlaylist(trackId) {
+      this.$emit("onHoldPlaylist", trackId);
+    },
+    musicsOrdered() {
+      const musicsOrdered = this.playlist.map(
+        (musicId) =>
+          this.musics[this.musics.findIndex((el) => el.id == musicId)]
+      );
+      return musicsOrdered;
     },
   },
 };

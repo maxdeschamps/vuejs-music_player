@@ -24,7 +24,7 @@
           @handleLike="handleLike(track.id)"
           :like="track.liked"
         />
-        <OnHold class="mr-1" @onHoldPlaylist="onHoldPlaylist" />
+        <OnHold class="mr-1" @onHoldPlaylist="onHoldPlaylist(track.id)" />
         <Details
           @handleLike="handleLike"
           :music="track"
@@ -59,8 +59,8 @@ export default {
     handleLike(trackId) {
       this.$emit("handleLike", trackId);
     },
-    onHoldPlaylist() {
-      // this.$emit("onHoldPlaylist");
+    onHoldPlaylist(trackId) {
+      this.$emit("onHoldPlaylist", trackId);
     },
     findArtist(artistId) {
       return this.artists.findIndex((artist) => artist.id === artistId);

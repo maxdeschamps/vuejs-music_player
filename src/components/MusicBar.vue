@@ -67,6 +67,7 @@ import SoundController from "./player/SoundController";
 export default {
   name: "MusicBar",
   props: {
+    playlist: Array,
     musics: Array,
     artists: Array,
     music: Number,

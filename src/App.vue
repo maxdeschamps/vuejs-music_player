@@ -9,6 +9,8 @@
         @changeSound="changeSound"
         @deleteMusic="deleteMusic"
         @handleLike="handleLike"
+        @onHoldPlaylist="onHoldPlaylist"
+        :playlist="playlist"
         :musics="musics"
         :artists="artists"
         :music="music"
@@ -25,9 +27,11 @@
       <router-view
         @playMusic="playMusic"
         @handleLike="handleLike"
+        @onHoldPlaylist="onHoldPlaylist"
         :musics="musics"
         :artists="artists"
         :music="musics[music]"
+        :playlist="playlist"
       />
     </div>
   </v-app>
@@ -60,7 +64,9 @@ export default {
         muted: false,
         volume: 1,
       },
-      playlist: [0],
+      playlist: JSON.parse(localStorage.getItem("data")).musics.map((music) => {
+        return music.id;
+      }),
       musics: JSON.parse(localStorage.getItem("data")).musics,
       artists: JSON.parse(localStorage.getItem("data")).artists,
     };
@@ -69,26 +75,39 @@ export default {
     changeMusic(next = true) {
       this.deleteMusic();
 
-      const newPosition = next
-        ? this.music + 1 == this.musics.length
-          ? 0
-          : this.music + 1
-        : this.music == 0
-        ? this.musics.length - 1
-        : this.music - 1;
-      this.music = newPosition;
+      const currentMusic = next
+        ? this.playlist.splice(0, 1)
+        : this.playlist.splice(this.playlist.length - 1, 1);
+
+      next
+        ? this.playlist.push(currentMusic[0])
+        : this.playlist.unshift(currentMusic[0]);
+
+      this.music = this.findMusic(this.playlist[0]);
 
       this.createMusic();
+    },
+    moveMusic(trackId, begin = true) {
+      const newPosition = begin ? 0 : 1;
+
+      const musicIndex = this.playlist.findIndex((music) => music == trackId);
+      this.playlist.splice(musicIndex, 1);
+
+      const currentMusic = this.playlist.splice(0, newPosition);
+      currentMusic.push(trackId);
+
+      begin
+        ? this.playlist.unshift(currentMusic[0])
+        : this.playlist.unshift(currentMusic[0], currentMusic[1]);
     },
     playMusic(trackId) {
       this.play = true;
 
-      const newPosition = this.findMusic(trackId);
-
-      if (this.music != newPosition) {
+      if (this.playlist[0] != trackId) {
         this.deleteMusic();
 
-        this.music = newPosition;
+        this.moveMusic(trackId);
+        this.music = this.findMusic(this.playlist[0]);
 
         this.createMusic();
       }
@@ -144,6 +163,11 @@ export default {
       data.musics = this.musics;
       localStorage.setItem("data", JSON.stringify(data));
     },
+    onHoldPlaylist(trackId) {
+      if (this.playlist[0] != trackId) {
+        this.moveMusic(trackId, false);
+      }
+    },
     findMusic(musicId) {
       return this.musics.findIndex((music) => music.id === musicId);
     },
@@ -152,9 +176,6 @@ export default {
     this.createMusic();
   },
   watch: {
-    music() {
-      // this.$emit("backgroundImage", "@/" + this.musics[this.music].thumbnail);
-    },
     audio() {
       this.duration.totalDuration = this.audio.duration;
     },

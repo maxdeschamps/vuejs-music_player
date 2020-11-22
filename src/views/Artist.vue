@@ -31,6 +31,7 @@
       <List
         @playMusic="playMusic"
         @handleLike="handleLike"
+        @onHoldPlaylist="onHoldPlaylist"
         :musics="findMusicsByArtist()"
         :artists="artists"
         :music="music"
@@ -60,6 +61,9 @@ export default {
     },
     handleLike(trackId) {
       this.$emit("handleLike", trackId);
+    },
+    onHoldPlaylist(trackId) {
+      this.$emit("onHoldPlaylist", trackId);
     },
     findArtist(artistName) {
       return this.artists.findIndex(

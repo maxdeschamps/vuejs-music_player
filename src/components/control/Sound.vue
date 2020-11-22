@@ -38,5 +38,7 @@ svg {
 }
 button {
   font-size: 0;
+  width: 40px;
+  height: 40px;
 }
 </style>

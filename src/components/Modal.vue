@@ -7,11 +7,15 @@
     </template>
 
     <v-card>
-      <v-card-title class="headline lighten-2">Liked musics </v-card-title>
+      <v-card-title class="headline lighten-2">Liked musics</v-card-title>
+
+      <hr />
+
       <v-card-text>
         <List
           @playMusic="playMusic"
           @handleLike="handleLike"
+          @onHoldPlaylist="onHoldPlaylist"
           :musics="findLikedMusics()"
           :artists="artists"
           :music="music"
@@ -45,6 +49,9 @@ export default {
     },
     handleLike(trackId) {
       this.$emit("handleLike", trackId);
+    },
+    onHoldPlaylist(trackId) {
+      this.$emit("onHoldPlaylist", trackId);
     },
     findLikedMusics() {
       return this.musics.filter((music) => music.liked);
