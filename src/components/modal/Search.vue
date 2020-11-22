@@ -42,7 +42,7 @@ export default {
     List,
   },
   mounted() {
-    this.results = this.searchMusic(this.search);
+    this.results = this.searchMusic(this.search.toLowerCase());
   },
   props: {
     musics: Array,
@@ -73,15 +73,17 @@ export default {
       const musicsOrdered = this.musics.slice();
       return musicsOrdered.filter(
         (music) =>
-          music.title.startsWith(value) ||
-          music.description.includes(value) ||
-          this.artists[this.findArtist(music.artist)].name.startsWith(value)
+          music.title.toLowerCase().includes(value) ||
+          music.description.toLowerCase().includes(value) ||
+          this.artists[this.findArtist(music.artist)].name
+            .toLowerCase()
+            .includes(value)
       );
     },
   },
   watch: {
     search(value) {
-      this.results = this.searchMusic(value);
+      this.results = this.searchMusic(value.toLowerCase());
     },
   },
 };

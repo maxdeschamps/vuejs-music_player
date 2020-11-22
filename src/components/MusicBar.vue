@@ -142,7 +142,7 @@ export default {
 }
 
 .flex-controller {
-  width: calc(100% - 200px);
+  width: calc(100% - 150px);
   display: flex;
 }
 
@@ -162,7 +162,7 @@ export default {
 
 .flex-control-bar > .sound-bar {
   width: 100%;
-  max-width: 250px;
+  max-width: 150px;
 }
 
 @media screen and (max-width: 700px) {

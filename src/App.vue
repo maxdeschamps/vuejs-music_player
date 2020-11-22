@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import data from "../public/data.json";
 import MusicBar from "@/components/MusicBar.vue";
+import data from "../public/data.json";
 
 export default {
   name: "App",
@@ -166,6 +166,7 @@ export default {
     onHoldPlaylist(trackId) {
       if (this.playlist[0] != trackId) {
         this.moveMusic(trackId, false);
+        console.log(this.playlist);
       }
     },
     findMusic(musicId) {
