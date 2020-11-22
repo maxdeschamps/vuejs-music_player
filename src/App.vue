@@ -166,7 +166,6 @@ export default {
     onHoldPlaylist(trackId) {
       if (this.playlist[0] != trackId) {
         this.moveMusic(trackId, false);
-        console.log(this.playlist);
       }
     },
     findMusic(musicId) {
