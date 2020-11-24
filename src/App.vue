@@ -96,7 +96,6 @@ export default {
       );
 
       this.playlist = currentMusics.concat(this.playlist);
-      console.log(this.playlist);
     },
     changePlaylist(trackId) {
       const musicIndex = this.playlist.findIndex((music) => music == trackId);
