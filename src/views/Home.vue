@@ -44,7 +44,7 @@
       @playMusic="playMusic"
       @handleLike="handleLike"
       @onHoldPlaylist="onHoldPlaylist"
-      :musics="musics"
+      :musics="musicsOrdered()"
       :artists="artists"
       :music="music"
     />
