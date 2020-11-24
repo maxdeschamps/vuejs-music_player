@@ -40,6 +40,7 @@
 <script>
 import MusicBar from "@/components/MusicBar.vue";
 import data from "../public/data.json";
+import Shake from "shake.js";
 
 export default {
   name: "App",
@@ -56,6 +57,7 @@ export default {
     return {
       music: 0,
       audio: "",
+      shake: "",
       play: false,
       duration: {
         currentDuration: 0,
@@ -180,6 +182,14 @@ export default {
   },
   mounted() {
     this.createMusic();
+
+    this.shake = new Shake();
+    var myShakeEvent = new Shake({
+      threshold: 10,
+      timeout: 5000,
+    });
+    myShakeEvent.start();
+    window.addEventListener("shake", this.changeMusic, false);
   },
   watch: {
     audio() {

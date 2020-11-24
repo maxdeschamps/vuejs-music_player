@@ -31,6 +31,7 @@
         />
         <Details
           @handleLike="handleLike"
+          @playMusic="playMusic"
           :music="track"
           :artist="artists[findArtist(track.artist)]"
         />

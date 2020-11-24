@@ -14,7 +14,9 @@
             :src="require('@/' + music.thumbnail)"
           />
 
-          {{ music.title }}
+          <button @click="playMusic(music.id)">
+            {{ music.title }}
+          </button>
           &nbsp;-
           <router-link
             class="router-link ml-1"
@@ -65,6 +67,9 @@ export default {
   methods: {
     handleLike(musicId) {
       this.$emit("handleLike", musicId);
+    },
+    playMusic(musicId) {
+      this.$emit("playMusic", musicId);
     },
   },
 };
