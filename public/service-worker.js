@@ -5,13 +5,7 @@ CACHE_FILES = [
     "../dist/images/",
     "../dist/img",
     "../dist/js",
-    "../dist/media"
-    // "/images",
-    // "/img",
-    // "/src/assets/",
-    // "/src/assets/artists/",
-    // "/src/assets/covers/",
-    // "/src/assets/musics/"
+    "../dist/media",
 ];
 
 if (workbox) {

@@ -33,6 +33,10 @@
         {{ music.description }}
       </v-card-text>
 
+      <v-btn @click="buyMusic(music)" class="mb-3">Buy music</v-btn>
+
+      <br />
+
       <v-btn class="mb-4">
         <router-link
           class="router-link ml-1"
@@ -62,6 +66,7 @@ export default {
   data() {
     return {
       dialog: false,
+      paiement: "",
     };
   },
   methods: {
@@ -70,6 +75,51 @@ export default {
     },
     playMusic(musicId) {
       this.$emit("playMusic", musicId);
+    },
+    buyMusic(music) {
+      if (window.PaymentRequest) {
+        this.paiement = new PaymentRequest(
+          this.buildSupportedPaymentMethodData(),
+          this.buildShoppingCartDetails(music)
+        );
+        this.paiement
+          .show()
+          .then(function (response) {
+            return response.complete(true);
+          })
+          .then(function () {
+            alert("Buy!");
+          })
+          .catch(function (e) {
+            alert(e.name);
+          });
+      }
+    },
+    buildSupportedPaymentMethodData() {
+      return [
+        {
+          supportedMethods: "basic-card",
+          data: {
+            supportedNetworks: ["visa", "mastercard"],
+            supportedTypes: ["debit"],
+          },
+        },
+      ];
+    },
+    buildShoppingCartDetails(music) {
+      return {
+        id: "order-123",
+        displayItems: [
+          {
+            label: music.title,
+            amount: { currency: "USD", value: music.cost },
+          },
+        ],
+        total: {
+          label: "Total",
+          amount: { currency: "USD", value: music.cost },
+        },
+      };
     },
   },
 };

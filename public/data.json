@@ -7,6 +7,7 @@
             "description": "Godzilla is a single by American rapper Eminem featuring American rapper Juice Wrld. It was released as a single on January 31, 2020, from Eminem's eleventh studio album Music to Be Murdered By (2020). The song was Juice Wrld's first posthumous release following his death in December 2019.",
             "thumbnail": "assets/covers/eminem.jpg",
             "url": "assets/musics/godzilla_eminem.mp3",
+            "cost": 10.00,
             "liked": true
         },
         {
@@ -16,6 +17,7 @@
             "description": "Thank You is a song written and performed by English singer-songwriter Dido. The song made its first appearance in 1998, on the soundtrack of the movie Sliding Doors. It was later included on Dido's 1999 debut album No Angel, becoming the album's biggest hit.",
             "thumbnail": "assets/covers/dido.jpg",
             "url": "assets/musics/thank_you_dido.mp3",
+            "cost": 2.00,
             "liked": false
         },
         {
@@ -25,6 +27,7 @@
             "description": "Stan is a song by American rapper Eminem featuring uncredited vocals from British singer Dido. It was released in October 2000 as the third single from Eminem's third album The Marshall Mathers LP (2000). It reached number one in twelve countries, including United Kingdom, Germany, Ireland and Australia.",
             "thumbnail": "assets/covers/eminem_stan.jpg",
             "url": "assets/musics/stan_eminem.mp3",
+            "cost": 8.00,
             "liked": false
         },
         {
@@ -34,6 +37,7 @@
             "description": "Creep is the debut single by English alternative rock band Radiohead, released on 21 September 1992. It appeared on their debut studio album, Pablo Honey (1993). Creep was not initially a chart success, but it became a worldwide hit after being re-released in 1993. Radiohead took elements from the Hollies' 1972 song The Air That I Breathe; following legal action, Albert Hammond and Mike Hazlewood are credited as cowriters.",
             "thumbnail": "assets/covers/radiohead.jpg",
             "url": "assets/musics/creep_radiohead.mp3",
+            "cost": 5.00,
             "liked": true
         }
     ],

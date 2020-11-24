@@ -21,7 +21,8 @@
     "vue": "^2.6.11",
     "vue-knob-control": "^1.6.0",
     "vue-router": "^3.4.8",
-    "vuetify": "^2.2.11"
+    "vuetify": "^2.2.11",
+    "web-audio-recorder-js": "0.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
