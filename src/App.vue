@@ -88,18 +88,24 @@ export default {
 
       this.createMusic();
     },
-    moveMusic(trackId, begin = true) {
-      const newPosition = begin ? 0 : 1;
+    moveMusic(trackId) {
+      const musicIndex = this.playlist.findIndex((music) => music == trackId);
+      const currentMusics = this.playlist.splice(
+        musicIndex,
+        this.playlist.length - musicIndex
+      );
 
+      this.playlist = currentMusics.concat(this.playlist);
+      console.log(this.playlist);
+    },
+    changePlaylist(trackId) {
       const musicIndex = this.playlist.findIndex((music) => music == trackId);
       this.playlist.splice(musicIndex, 1);
 
-      const currentMusic = this.playlist.splice(0, newPosition);
+      const currentMusic = this.playlist.splice(0, 1);
       currentMusic.push(trackId);
 
-      begin
-        ? this.playlist.unshift(currentMusic[0])
-        : this.playlist.unshift(currentMusic[0], currentMusic[1]);
+      this.playlist.unshift(currentMusic[0], currentMusic[1]);
     },
     playMusic(trackId) {
       this.play = true;
@@ -166,7 +172,7 @@ export default {
     },
     onHoldPlaylist(trackId) {
       if (this.playlist[0] != trackId) {
-        this.moveMusic(trackId, false);
+        this.changePlaylist(trackId);
       }
     },
     findMusic(musicId) {
