@@ -37,7 +37,7 @@ if (workbox) {
 
     self.addEventListener('fetch', function (event) {
         event.respondWith(
-            cache.open(CACHE)
+            caches.open(CACHE)
                 .then(function (cache) {
                     cache.match(event.request)
                         .then(function (cacheResponse) {

@@ -30,6 +30,15 @@
       <v-card-text class="mt-2">
         {{ music.description }}
       </v-card-text>
+
+      <v-btn class="mb-4">
+        <router-link
+          class="router-link ml-1"
+          :to="'/artist/' + artist.name.toLowerCase()"
+        >
+          See the artist
+        </router-link>
+      </v-btn>
     </v-card>
   </v-dialog>
 </template>

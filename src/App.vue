@@ -185,6 +185,9 @@ export default {
     audio() {
       this.duration.totalDuration = this.audio.duration;
     },
+    music() {
+      navigator.vibrate([100]);
+    },
   },
 };
 </script>
