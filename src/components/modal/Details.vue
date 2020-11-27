@@ -14,7 +14,7 @@
             :src="require('@/' + music.thumbnail)"
           />
 
-          <button @click="playMusic(music.id)">
+          <button @click="playMusic(music.id)" class="mr-1">
             {{ music.title }}
           </button>
           &nbsp;-
