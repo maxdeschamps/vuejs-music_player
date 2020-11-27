@@ -48,6 +48,10 @@
       :artists="artists"
       :music="music"
     />
+
+    <br />
+
+    <v-btn class="mb-3" to="/record-music">Record your music</v-btn>
   </v-item-group>
 </template>
 

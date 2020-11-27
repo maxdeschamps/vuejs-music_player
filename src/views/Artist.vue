@@ -44,7 +44,7 @@
       />
     </v-card>
 
-    <v-btn :to="'/'" class="lighten-2 mb-5">Return to playlist</v-btn>
+    <v-btn to="/" class="lighten-2 mb-5">Return to playlist</v-btn>
   </v-item-group>
 </template>
 

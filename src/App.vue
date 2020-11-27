@@ -26,12 +26,14 @@
       ></v-img>
       <router-view
         @playMusic="playMusic"
+        @handleMusic="handleMusic"
         @handleLike="handleLike"
         @onHoldPlaylist="onHoldPlaylist"
         :musics="musics"
         :artists="artists"
         :music="musics[music]"
         :playlist="playlist"
+        :play="play"
       />
     </div>
   </v-app>
@@ -121,8 +123,10 @@ export default {
       }
     },
     handleMusic() {
-      this.play = !this.play;
-      this.play ? this.audio.play() : this.audio.pause();
+      if (this.$route.name !== "Record") {
+        this.play = !this.play;
+        this.play ? this.audio.play() : this.audio.pause();
+      }
     },
     changeTime(time) {
       this.audio.currentTime = time;
