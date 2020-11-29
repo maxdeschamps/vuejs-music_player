@@ -9,45 +9,27 @@
         ></v-progress-linear>
       </template>
 
-      <v-img height="250" :src="require('@/' + music.thumbnail)"></v-img>
+      <v-img
+        height="250"
+        :src="require('@/' + $store.state.musics[$store.state.music].thumbnail)"
+      ></v-img>
 
       <v-card-actions class="d-flex justify-space-between align-center py-2">
         <div class="d-flex">
           <div class="d-flex flex-column text-left">
-            <v-card-title class="py-0"> My playlist</v-card-title>
+            <v-card-title class="py-0">My playlist</v-card-title>
           </div>
         </div>
       </v-card-actions>
 
       <hr />
 
-      <List
-        @playMusic="playMusic"
-        @handleLike="handleLike"
-        @onHoldPlaylist="onHoldPlaylist"
-        :musics="musicsOrdered()"
-        :artists="artists"
-        :music="music"
-      />
+      <List @playMusic="playMusic" :musics="musicsOrdered()" />
     </v-card>
 
-    <LikedMusics
-      @playMusic="playMusic"
-      @handleLike="handleLike"
-      @onHoldPlaylist="onHoldPlaylist"
-      :musics="musics"
-      :artists="artists"
-      :music="music"
-    />
+    <LikedMusics @playMusic="playMusic" />
     &nbsp;
-    <Search
-      @playMusic="playMusic"
-      @handleLike="handleLike"
-      @onHoldPlaylist="onHoldPlaylist"
-      :musics="musicsOrdered()"
-      :artists="artists"
-      :music="music"
-    />
+    <Search @playMusic="playMusic" :musics="musicsOrdered()" />
   </v-item-group>
 </template>
 
@@ -63,26 +45,16 @@ export default {
     LikedMusics,
     Search,
   },
-  props: {
-    musics: Array,
-    artists: Array,
-    music: Object,
-    playlist: Array,
-  },
   methods: {
     playMusic(trackId) {
       this.$emit("playMusic", trackId);
     },
-    handleLike(trackId) {
-      this.$emit("handleLike", trackId);
-    },
-    onHoldPlaylist(trackId) {
-      this.$emit("onHoldPlaylist", trackId);
-    },
     musicsOrdered() {
-      const musicsOrdered = this.playlist.map(
+      const musicsOrdered = this.$store.state.playlist.map(
         (musicId) =>
-          this.musics[this.musics.findIndex((el) => el.id == musicId)]
+          this.$store.state.musics[
+            this.$store.state.musics.findIndex((el) => el.id == musicId)
+          ]
       );
       return musicsOrdered;
     },

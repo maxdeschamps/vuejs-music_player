@@ -1,21 +1,22 @@
 <template>
-  <button @click="handleLike">
-    <svg-icon v-if="like" type="mdi" :path="iconLike"></svg-icon>
+  <button @click="handleLike(music.id)">
+    <svg-icon v-if="music.liked" type="mdi" :path="iconLike"></svg-icon>
     <svg-icon v-else type="mdi" :path="iconNotLike"></svg-icon>
   </button>
 </template>
 
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiHeartPulse } from "@mdi/js";
-import { mdiHeartOutline } from "@mdi/js";
+import { mdiHeartPulse, mdiHeartOutline } from "@mdi/js";
+import data from "@/../public/data.json";
+
 export default {
   name: "Like",
   components: {
     SvgIcon,
   },
   props: {
-    like: Boolean,
+    music: Object,
   },
   data() {
     return {
@@ -24,8 +25,19 @@ export default {
     };
   },
   methods: {
-    handleLike() {
-      this.$emit("handleLike");
+    handleLike(musicId) {
+      const position = this.findMusic(musicId);
+      this.$store.state.musics[position].liked = !this.$store.state.musics[
+        position
+      ].liked;
+
+      data.musics = this.$store.state.musics;
+      localStorage.setItem("data", JSON.stringify(data));
+    },
+    findMusic(musicId) {
+      return this.$store.state.musics.findIndex(
+        (music) => music.id === musicId
+      );
     },
   },
 };

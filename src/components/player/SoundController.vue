@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center align-center py-2 soundContainer mx-5">
-    <Sound class="mr-4" @handleSound="handleSound" :muted="sound.muted" />
+    <Sound :audio="audio" class="mr-4" />
     <knob-control
       @change="onChange($event)"
       v-model="soundVolume"
@@ -29,12 +29,12 @@ Vue.use(KnobControl);
 
 export default {
   name: "SoundController",
-  props: {
-    sound: Object,
-  },
   components: {
     Sound,
     KnobControl,
+  },
+  props: {
+    audio: [String, HTMLAudioElement],
   },
   data() {
     return {
@@ -42,16 +42,12 @@ export default {
     };
   },
   created() {
-    this.soundVolume = this.sound.volume;
-  },
-  methods: {
-    handleSound() {
-      this.$emit("handleSound");
-    },
+    this.soundVolume = this.$store.state.sound.volume;
   },
   watch: {
     soundVolume(value) {
-      this.$emit("changeSound", value);
+      this.$store.state.sound.volume = value;
+      this.audio.volume = this.$store.state.sound.volume;
     },
   },
 };

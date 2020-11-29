@@ -12,7 +12,8 @@
       <v-img
         height="250"
         :src="
-          require('@/' + artists[findArtist(this.$route.params.artist)].image)
+          require('@/' +
+            $store.state.artists[findArtist(this.$route.params.artist)].image)
         "
       ></v-img>
 
@@ -20,7 +21,7 @@
         <div class="d-flex">
           <div class="d-flex flex-column text-left">
             <v-card-title class="py-0">{{
-              artists[findArtist(this.$route.params.artist)].name
+              $store.state.artists[findArtist(this.$route.params.artist)].name
             }}</v-card-title>
           </div>
         </div>
@@ -29,19 +30,15 @@
       <hr />
 
       <v-card-text>
-        {{ artists[findArtist(this.$route.params.artist)].description }}
+        {{
+          $store.state.artists[findArtist(this.$route.params.artist)]
+            .description
+        }}
       </v-card-text>
 
       <hr />
 
-      <List
-        @playMusic="playMusic"
-        @handleLike="handleLike"
-        @onHoldPlaylist="onHoldPlaylist"
-        :musics="findMusicsByArtist()"
-        :artists="artists"
-        :music="music"
-      />
+      <List @playMusic="playMusic" :musics="findMusicsByArtist()" />
     </v-card>
 
     <v-btn :to="'/'" class="lighten-2 mb-5">Return to playlist</v-btn>
@@ -56,31 +53,21 @@ export default {
   components: {
     List,
   },
-  props: {
-    musics: Array,
-    artists: Array,
-    music: Object,
-  },
   methods: {
     playMusic(trackId) {
       this.$emit("playMusic", trackId);
     },
-    handleLike(trackId) {
-      this.$emit("handleLike", trackId);
-    },
-    onHoldPlaylist(trackId) {
-      this.$emit("onHoldPlaylist", trackId);
-    },
     findArtist(artistName) {
-      return this.artists.findIndex(
+      return this.$store.state.artists.findIndex(
         (artist) => artist.name.toLowerCase() === artistName.toLowerCase()
       );
     },
     findMusicsByArtist() {
-      return this.musics.filter(
+      return this.$store.state.musics.filter(
         (music) =>
           music.artist ==
-          this.artists[this.findArtist(this.$route.params.artist)].id
+          this.$store.state.artists[this.findArtist(this.$route.params.artist)]
+            .id
       );
     },
   },

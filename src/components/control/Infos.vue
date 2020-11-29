@@ -5,6 +5,7 @@
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiInformationOutline } from "@mdi/js";
+
 export default {
   name: "Infos",
   components: {

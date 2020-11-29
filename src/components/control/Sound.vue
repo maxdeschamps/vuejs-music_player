@@ -1,21 +1,25 @@
 <template>
   <button @click="handleSound">
-    <svg-icon v-if="muted" type="mdi" :path="iconSound"></svg-icon>
+    <svg-icon
+      v-if="$store.state.sound.muted"
+      type="mdi"
+      :path="iconSound"
+    ></svg-icon>
     <svg-icon v-else type="mdi" :path="iconMute"></svg-icon>
   </button>
 </template>
 
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiMusicCircleOutline } from "@mdi/js";
-import { mdiMusicCircle } from "@mdi/js";
+import { mdiMusicCircleOutline, mdiMusicCircle } from "@mdi/js";
+
 export default {
   name: "Sound",
   components: {
     SvgIcon,
   },
   props: {
-    muted: Boolean,
+    audio: [String, HTMLAudioElement],
   },
   data() {
     return {
@@ -25,7 +29,8 @@ export default {
   },
   methods: {
     handleSound() {
-      this.$emit("handleSound");
+      this.$store.state.sound.muted = !this.$store.state.sound.muted;
+      this.audio.muted = this.$store.state.sound.muted;
     },
   },
 };

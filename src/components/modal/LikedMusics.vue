@@ -12,14 +12,7 @@
       <hr />
 
       <v-card-text>
-        <List
-          @playMusic="playMusic"
-          @handleLike="handleLike"
-          @onHoldPlaylist="onHoldPlaylist"
-          :musics="findLikedMusics()"
-          :artists="artists"
-          :music="music"
-        />
+        <List @playMusic="playMusic" :musics="findLikedMusics()" />
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -33,11 +26,6 @@ export default {
   components: {
     List,
   },
-  props: {
-    musics: Array,
-    artists: Array,
-    music: Object,
-  },
   data() {
     return {
       dialog: false,
@@ -47,14 +35,8 @@ export default {
     playMusic(trackId) {
       this.$emit("playMusic", trackId);
     },
-    handleLike(trackId) {
-      this.$emit("handleLike", trackId);
-    },
-    onHoldPlaylist(trackId) {
-      this.$emit("onHoldPlaylist", trackId);
-    },
     findLikedMusics() {
-      return this.musics.filter((music) => music.liked);
+      return this.$store.state.musics.filter((music) => music.liked);
     },
   },
 };

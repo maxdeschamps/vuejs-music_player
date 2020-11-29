@@ -15,26 +15,13 @@
         />
 
         {{ track.title }}&nbsp;-
-        <em>{{ artists[findArtist(track.artist)].name }}</em>
+        <em>{{ $store.state.artists[findArtist(track.artist)].name }}</em>
       </button>
 
       <div class="d-flex">
-        <Like
-          class="mr-1"
-          @handleLike="handleLike(track.id)"
-          :like="track.liked"
-        />
-        <OnHold
-          class="mr-1"
-          @onHoldPlaylist="onHoldPlaylist(track.id)"
-          :isPlayed="track.id == music.id"
-        />
-        <Details
-          @handleLike="handleLike"
-          @playMusic="playMusic"
-          :music="track"
-          :artist="artists[findArtist(track.artist)]"
-        />
+        <Like class="mr-1" :music="track" />
+        <OnHold class="mr-1" :music="track" />
+        <Details :music="track" />
       </div>
     </v-item-group>
   </v-list>
@@ -49,8 +36,6 @@ export default {
   name: "List",
   props: {
     musics: Array,
-    artists: Array,
-    music: Object,
   },
   components: {
     Like,
@@ -61,17 +46,15 @@ export default {
     playMusic(trackId) {
       this.$emit("playMusic", trackId);
     },
-    handleLike(trackId) {
-      this.$emit("handleLike", trackId);
-    },
-    onHoldPlaylist(trackId) {
-      this.$emit("onHoldPlaylist", trackId);
-    },
     findArtist(artistId) {
-      return this.artists.findIndex((artist) => artist.id === artistId);
+      return this.$store.state.artists.findIndex(
+        (artist) => artist.id === artistId
+      );
     },
-    findMusic(musicId) {
-      return this.musics.findIndex((music) => music.id === musicId);
+  },
+  computed: {
+    music() {
+      return this.$store.state.musics[this.$store.state.music];
     },
   },
 };

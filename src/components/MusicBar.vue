@@ -3,29 +3,20 @@
     <div class="flex-bar">
       <div class="flex-music">
         <figure class="thumbnail-figure">
-          <img
-            class="thumbnail-image"
-            :src="require('@/' + musics[music].thumbnail)"
-          />
+          <img class="thumbnail-image" :src="require('@/' + music.thumbnail)" />
           <figcaption>
-            <Like
-              @handleLike="handleLike(musics[music].id)"
-              :like="musics[music].liked"
-            />
+            <Like :music="music" />
           </figcaption>
         </figure>
 
         <div class="d-flex flex-column text-left ml-4">
-          <h3 class="py-0">{{ musics[music].title }}</h3>
+          <h3 class="py-0">
+            {{ music.title }}
+          </h3>
 
           <em class="py-0">
-            <router-link
-              :to="
-                '/artist/' +
-                artists[findArtist(musics[music].artist)].name.toLowerCase()
-              "
-            >
-              {{ artists[findArtist(musics[music].artist)].name }}
+            <router-link :to="'/artist/' + artist.name.toLowerCase()">
+              {{ artist.name }}
             </router-link>
           </em>
         </div>
@@ -33,23 +24,14 @@
 
       <div class="flex-controller">
         <div class="flex-button">
-          <Play @handleMusic="handleMusic" :play="play" />
+          <Play :audio="audio" />
           <Previous @changeMusic="changeMusic" />
           <Next @changeMusic="changeMusic" />
         </div>
 
         <div class="flex-control-bar">
-          <ProgressBar
-            class="progress-bar"
-            @changeTime="changeTime"
-            :duration="duration"
-          />
-          <SoundController
-            class="sound-bar"
-            @handleSound="handleSound"
-            @changeSound="changeSound"
-            :sound="sound"
-          />
+          <ProgressBar :audio="audio" class="progress-bar" />
+          <SoundController :audio="audio" class="sound-bar" />
         </div>
       </div>
     </div>
@@ -63,18 +45,10 @@ import Next from "./control/Next";
 import Like from "./control/Like";
 import ProgressBar from "./player/ProgressBar";
 import SoundController from "./player/SoundController";
+import data from "@/../public/data.json";
 
 export default {
   name: "MusicBar",
-  props: {
-    playlist: Array,
-    musics: Array,
-    artists: Array,
-    music: Number,
-    play: Boolean,
-    duration: Object,
-    sound: Object,
-  },
   components: {
     ProgressBar,
     SoundController,
@@ -83,27 +57,39 @@ export default {
     Next,
     Like,
   },
+  props: {
+    audio: [String, HTMLAudioElement],
+  },
   methods: {
-    changeMusic(next = true) {
+    changeMusic(next) {
       this.$emit("changeMusic", next);
     },
-    handleMusic() {
-      this.$emit("handleMusic");
+    handleLike(musicId) {
+      const position = this.findMusic(musicId);
+      this.$store.state.musics[position].liked = !this.$store.state.musics[
+        position
+      ].liked;
+
+      data.musics = this.$store.state.musics;
+      localStorage.setItem("data", JSON.stringify(data));
     },
-    changeTime(time) {
-      this.$emit("changeTime", time);
-    },
-    handleSound() {
-      this.$emit("handleSound");
-    },
-    changeSound(volume) {
-      this.$emit("changeSound", volume);
-    },
-    handleLike(trackId) {
-      this.$emit("handleLike", trackId);
+    findMusic(musicId) {
+      return this.$store.state.musics.findIndex(
+        (music) => music.id === musicId
+      );
     },
     findArtist(artistId) {
-      return this.artists.findIndex((artist) => artist.id === artistId);
+      return this.$store.state.artists.findIndex(
+        (artist) => artist.id === artistId
+      );
+    },
+  },
+  computed: {
+    music() {
+      return this.$store.state.musics[this.$store.state.music];
+    },
+    artist() {
+      return this.$store.state.artists[this.findArtist(this.music.artist)];
     },
   },
 };

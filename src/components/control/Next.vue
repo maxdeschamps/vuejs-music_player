@@ -7,6 +7,7 @@
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiSkipNextCircleOutline } from "@mdi/js";
+
 export default {
   name: "Next",
   components: {

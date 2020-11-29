@@ -20,14 +20,7 @@
           prepend-icon="mdi-magnify"
         ></v-text-field>
 
-        <List
-          @playMusic="playMusic"
-          @handleLike="handleLike"
-          @onHoldPlaylist="onHoldPlaylist"
-          :musics="results"
-          :artists="artists"
-          :music="music"
-        />
+        <List @playMusic="playMusic" :musics="results" />
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -44,11 +37,6 @@ export default {
   mounted() {
     this.results = this.searchMusic(this.search.toLowerCase());
   },
-  props: {
-    musics: Array,
-    artists: Array,
-    music: Object,
-  },
   data() {
     return {
       dialog: false,
@@ -60,22 +48,18 @@ export default {
     playMusic(trackId) {
       this.$emit("playMusic", trackId);
     },
-    handleLike(trackId) {
-      this.$emit("handleLike", trackId);
-    },
-    onHoldPlaylist(trackId) {
-      this.$emit("onHoldPlaylist", trackId);
-    },
     findArtist(artistId) {
-      return this.artists.findIndex((artist) => artist.id === artistId);
+      return this.$store.state.artists.findIndex(
+        (artist) => artist.id === artistId
+      );
     },
     searchMusic(value) {
-      const musicsOrdered = this.musics.slice();
+      const musicsOrdered = this.$store.state.musics.slice();
       return musicsOrdered.filter(
         (music) =>
           music.title.toLowerCase().includes(value) ||
           music.description.toLowerCase().includes(value) ||
-          this.artists[this.findArtist(music.artist)].name
+          this.$store.state.artists[this.findArtist(music.artist)].name
             .toLowerCase()
             .includes(value)
       );

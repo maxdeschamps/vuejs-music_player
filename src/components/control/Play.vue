@@ -1,21 +1,21 @@
 <template>
   <button @click="handleMusic">
-    <svg-icon v-if="play" type="mdi" :path="iconPause"></svg-icon>
+    <svg-icon v-if="$store.state.play" type="mdi" :path="iconPause"></svg-icon>
     <svg-icon v-else type="mdi" :path="iconPlay"></svg-icon>
   </button>
 </template>
 
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiPlayCircleOutline } from "@mdi/js";
-import { mdiPauseCircleOutline } from "@mdi/js";
+import { mdiPlayCircleOutline, mdiPauseCircleOutline } from "@mdi/js";
+
 export default {
   name: "Play",
   components: {
     SvgIcon,
   },
   props: {
-    play: Boolean,
+    audio: [String, HTMLAudioElement],
   },
   data() {
     return {
@@ -25,7 +25,8 @@ export default {
   },
   methods: {
     handleMusic() {
-      this.$emit("handleMusic");
+      this.$store.state.play = !this.$store.state.play;
+      this.$store.state.play ? this.audio.play() : this.audio.pause();
     },
   },
 };

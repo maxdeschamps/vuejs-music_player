@@ -26,7 +26,7 @@
           </router-link>
         </div>
 
-        <Like @handleLike="handleLike(music.id)" :like="music.liked" />
+        <Like :music="music" />
       </v-card-title>
       <hr />
       <v-card-text class="mt-2">
@@ -57,7 +57,6 @@ export default {
   name: "Details",
   props: {
     music: Object,
-    artist: Object,
   },
   components: {
     Infos,
@@ -70,11 +69,8 @@ export default {
     };
   },
   methods: {
-    handleLike(musicId) {
-      this.$emit("handleLike", musicId);
-    },
-    playMusic(musicId) {
-      this.$emit("playMusic", musicId);
+    playMusic(trackId) {
+      this.$emit("playMusic", trackId);
     },
     buyMusic(music) {
       if (window.PaymentRequest) {
@@ -120,6 +116,16 @@ export default {
           amount: { currency: "USD", value: music.cost },
         },
       };
+    },
+    findArtist(artistId) {
+      return this.$store.state.artists.findIndex(
+        (artist) => artist.id === artistId
+      );
+    },
+  },
+  computed: {
+    artist() {
+      return this.$store.state.artists[this.findArtist(this.music.artist)];
     },
   },
 };

@@ -1,45 +1,18 @@
 <template>
   <v-app>
     <div id="nav">
-      <MusicBar
-        @changeMusic="changeMusic"
-        @handleMusic="handleMusic"
-        @changeTime="changeTime"
-        @handleSound="handleSound"
-        @changeSound="changeSound"
-        @deleteMusic="deleteMusic"
-        @handleLike="handleLike"
-        @onHoldPlaylist="onHoldPlaylist"
-        :playlist="playlist"
-        :musics="musics"
-        :artists="artists"
-        :music="music"
-        :play="play"
-        :duration="duration"
-        :sound="sound"
-      />
+      <MusicBar @changeMusic="changeMusic" :audio="audio" />
     </div>
     <div id="core">
-      <v-img
-        class="bodyImage"
-        :src="require('@/' + musics[music].thumbnail)"
-      ></v-img>
-      <router-view
-        @playMusic="playMusic"
-        @handleLike="handleLike"
-        @onHoldPlaylist="onHoldPlaylist"
-        :musics="musics"
-        :artists="artists"
-        :music="musics[music]"
-        :playlist="playlist"
-      />
+      <v-img class="bodyImage" :src="require('@/' + music.thumbnail)"></v-img>
+      <router-view @playMusic="playMusic" />
     </div>
   </v-app>
 </template>
 
 <script>
-import MusicBar from "@/components/MusicBar.vue";
-import data from "../public/data.json";
+import MusicBar from "@/components/MusicBar";
+import data from "@/../public/data.json";
 import Shake from "shake.js";
 
 export default {
@@ -47,154 +20,130 @@ export default {
   components: {
     MusicBar,
   },
+  data() {
+    return {
+      audio: "",
+    };
+  },
   created() {
     if (!localStorage.getItem("data")) {
       localStorage.setItem("data", JSON.stringify(data));
       this.$router.go();
     }
-  },
-  data() {
-    return {
-      music: 0,
-      audio: "",
-      shake: "",
-      play: false,
-      duration: {
-        currentDuration: 0,
-        totalDuration: 0,
-      },
-      sound: {
-        muted: false,
-        volume: 1,
-      },
-      playlist: JSON.parse(localStorage.getItem("data")).musics.map((music) => {
-        return music.id;
-      }),
-      musics: JSON.parse(localStorage.getItem("data")).musics,
-      artists: JSON.parse(localStorage.getItem("data")).artists,
-    };
+    this.$store.state.playlist = JSON.parse(
+      localStorage.getItem("data")
+    ).musics.map((music) => {
+      return music.id;
+    });
+    this.$store.state.musics = JSON.parse(localStorage.getItem("data")).musics;
+    this.$store.state.artists = JSON.parse(
+      localStorage.getItem("data")
+    ).artists;
   },
   methods: {
-    changeMusic(next = true) {
-      this.deleteMusic();
-
-      const currentMusic = next
-        ? this.playlist.splice(0, 1)
-        : this.playlist.splice(this.playlist.length - 1, 1);
-
-      next
-        ? this.playlist.push(currentMusic[0])
-        : this.playlist.unshift(currentMusic[0]);
-
-      this.music = this.findMusic(this.playlist[0]);
-
-      this.createMusic();
-    },
-    moveMusic(trackId) {
-      const musicIndex = this.playlist.findIndex((music) => music == trackId);
-      const currentMusics = this.playlist.splice(
-        musicIndex,
-        this.playlist.length - musicIndex
-      );
-
-      this.playlist = currentMusics.concat(this.playlist);
-    },
-    changePlaylist(trackId) {
-      const musicIndex = this.playlist.findIndex((music) => music == trackId);
-      this.playlist.splice(musicIndex, 1);
-
-      const currentMusic = this.playlist.splice(0, 1);
-      currentMusic.push(trackId);
-
-      this.playlist.unshift(currentMusic[0], currentMusic[1]);
-    },
     playMusic(trackId) {
-      this.play = true;
+      this.$store.state.play = true;
 
-      if (this.playlist[0] != trackId) {
+      if (this.$store.state.playlist[0] != trackId) {
         this.deleteMusic();
 
         this.moveMusic(trackId);
-        this.music = this.findMusic(this.playlist[0]);
+        this.$store.state.music = this.findMusic(this.$store.state.playlist[0]);
 
         this.createMusic();
       }
     },
-    handleMusic() {
-      this.play = !this.play;
-      this.play ? this.audio.play() : this.audio.pause();
-    },
-    changeTime(time) {
-      this.audio.currentTime = time;
-    },
-    handleSound() {
-      this.sound.muted = !this.sound.muted;
-      this.audio.muted = this.sound.muted;
-    },
-    changeSound(volume) {
-      this.sound.volume = volume;
-      this.audio.volume = this.sound.volume;
-    },
-    progressMusic() {
-      this.duration.currentDuration = Math.round(this.audio.currentTime);
-      this.currentDuration = Math.round(this.audio.currentTime);
+    createMusic() {
+      this.audio = new Audio(
+        require("@/" + this.$store.state.musics[this.$store.state.music].url)
+      );
+
+      if (this.$store.state.play) {
+        this.audio.play();
+      }
+      this.audio.muted = this.$store.state.sound.muted;
+      this.audio.volume = this.$store.state.sound.volume;
+
+      const localThis = this;
+      this.audio.addEventListener("loadedmetadata", function () {
+        localThis.$store.state.duration.totalDuration = Math.round(
+          localThis.audio.duration
+        );
+      });
+      this.audio.addEventListener("ended", this.changeMusic);
+      this.audio.addEventListener("timeupdate", this.progressMusic);
     },
     deleteMusic() {
       this.audio.pause();
 
-      this.duration.currentDuration = 0;
+      this.$store.state.duration.currentDuration = 0;
 
       this.audio.removeEventListener("ended", this.changeMusic);
       this.audio.removeEventListener("timeupdate", this.progressMusic);
 
       this.audio.remove();
     },
-    createMusic() {
-      this.audio = new Audio(require("@/" + this.musics[this.music].url));
-      if (this.play) {
-        this.audio.play();
-      }
-      this.audio.muted = this.sound.muted;
-      this.audio.volume = this.sound.volume;
-
-      const localThis = this;
-      this.audio.addEventListener("loadedmetadata", function () {
-        localThis.duration.totalDuration = Math.round(localThis.audio.duration);
-      });
-      this.audio.addEventListener("ended", this.changeMusic);
-      this.audio.addEventListener("timeupdate", this.progressMusic);
+    progressMusic() {
+      this.$store.state.duration.currentDuration = Math.round(
+        this.audio.currentTime
+      );
+      this.$store.state.currentDuration = Math.round(this.audio.currentTime);
     },
-    handleLike(trackId) {
-      const position = this.findMusic(trackId);
-      this.musics[position].liked = !this.musics[position].liked;
+    changeMusic(next = true) {
+      this.deleteMusic();
 
-      data.musics = this.musics;
-      localStorage.setItem("data", JSON.stringify(data));
+      const currentMusic = next
+        ? this.$store.state.playlist.splice(0, 1)
+        : this.$store.state.playlist.splice(
+            this.$store.state.playlist.length - 1,
+            1
+          );
+
+      next
+        ? this.$store.state.playlist.push(currentMusic[0])
+        : this.$store.state.playlist.unshift(currentMusic[0]);
+
+      this.$store.state.music = this.findMusic(this.$store.state.playlist[0]);
+
+      this.createMusic();
     },
-    onHoldPlaylist(trackId) {
-      if (this.playlist[0] != trackId) {
-        this.changePlaylist(trackId);
-      }
+    moveMusic(trackId) {
+      const musicIndex = this.$store.state.playlist.findIndex(
+        (music) => music == trackId
+      );
+      const currentMusics = this.$store.state.playlist.splice(
+        musicIndex,
+        this.$store.state.playlist.length - musicIndex
+      );
+
+      this.$store.state.playlist = currentMusics.concat(
+        this.$store.state.playlist
+      );
     },
     findMusic(musicId) {
-      return this.musics.findIndex((music) => music.id === musicId);
+      return this.$store.state.musics.findIndex(
+        (music) => music.id === musicId
+      );
     },
   },
   mounted() {
     this.createMusic();
 
-    this.shake = new Shake();
+    this.$store.state.shake = new Shake();
     var myShakeEvent = new Shake({
       threshold: 10,
       timeout: 5000,
     });
     myShakeEvent.start();
-    window.addEventListener("shake", this.changeMusic, false);
+
+    window.addEventListener("shake", this.changeMusic);
+  },
+  computed: {
+    music() {
+      return this.$store.state.musics[this.$store.state.music];
+    },
   },
   watch: {
-    audio() {
-      this.duration.totalDuration = this.audio.duration;
-    },
     music() {
       navigator.vibrate([100]);
     },

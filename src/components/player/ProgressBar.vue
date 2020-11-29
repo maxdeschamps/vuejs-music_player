@@ -25,31 +25,41 @@
 <script>
 export default {
   name: "ProgressBar",
-  props: {
-    duration: Object,
-  },
   data() {
     return {
       totalDuration: false,
     };
+  },
+  props: {
+    audio: [String, HTMLAudioElement],
   },
   methods: {
     handleRestTime() {
       this.totalDuration = !this.totalDuration;
     },
     onChange(event) {
-      const musicPosition = (this.duration.totalDuration * event) / 100;
-      this.$emit("changeTime", musicPosition);
+      const musicPosition =
+        (this.$store.state.duration.totalDuration * event) / 100;
+      this.audio.currentTime = musicPosition;
     },
     formatedNumber(n) {
       return n > 9 ? "" + n : "0" + n;
+    },
+    formatedDuration(duration) {
+      return duration
+        ? this.formatedNumber(Math.floor(duration / 60)) +
+            ":" +
+            this.formatedNumber(Math.floor(duration % 60))
+        : "00:00";
     },
   },
   computed: {
     progressBar: {
       get: function () {
         return (
-          (this.duration.currentDuration / this.duration.totalDuration) * 100
+          (this.$store.state.duration.currentDuration /
+            this.$store.state.duration.totalDuration) *
+          100
         );
       },
       set: function () {
@@ -57,33 +67,17 @@ export default {
       },
     },
     formatedCurrentDuration() {
-      const formatedCurrentDuration = this.duration.currentDuration
-        ? this.formatedNumber(Math.floor(this.duration.currentDuration / 60)) +
-          ":" +
-          this.formatedNumber(Math.floor(this.duration.currentDuration % 60))
-        : "00:00";
-
-      return formatedCurrentDuration;
+      return this.formatedDuration(this.$store.state.duration.currentDuration);
     },
     formatedTotalDuration() {
-      const formatedTotalDuration = this.duration.totalDuration
-        ? this.formatedNumber(Math.floor(this.duration.totalDuration / 60)) +
-          ":" +
-          this.formatedNumber(Math.floor(this.duration.totalDuration % 60))
-        : "00:00";
-
-      return formatedTotalDuration;
+      return this.formatedDuration(this.$store.state.duration.totalDuration);
     },
     formatedRestDuration() {
       const restTime =
-        this.duration.totalDuration - this.duration.currentDuration;
-      const formatedRestDuration = restTime
-        ? this.formatedNumber(Math.floor(restTime / 60)) +
-          ":" +
-          this.formatedNumber(Math.floor(restTime % 60))
-        : "00:00";
+        this.$store.state.duration.totalDuration -
+        this.$store.state.duration.currentDuration;
 
-      return formatedRestDuration;
+      return this.formatedDuration(restTime);
     },
   },
 };

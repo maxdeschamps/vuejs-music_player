@@ -22,6 +22,7 @@
     "vue-knob-control": "^1.6.0",
     "vue-router": "^3.4.8",
     "vuetify": "^2.2.11",
+    "vuex": "^3.6.0",
     "web-audio-recorder-js": "0.0.2"
   },
   "devDependencies": {
