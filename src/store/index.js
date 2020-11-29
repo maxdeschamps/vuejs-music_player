@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     music: 0,
+    audio: "",
     shake: "",
     play: false,
     duration: {

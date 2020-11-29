@@ -18,9 +18,6 @@ export default {
   components: {
     SvgIcon,
   },
-  props: {
-    audio: [String, HTMLAudioElement],
-  },
   data() {
     return {
       iconSound: mdiMusicCircle,
@@ -30,7 +27,7 @@ export default {
   methods: {
     handleSound() {
       this.$store.state.sound.muted = !this.$store.state.sound.muted;
-      this.audio.muted = this.$store.state.sound.muted;
+      this.$store.state.audio.muted = this.$store.state.sound.muted;
     },
   },
 };

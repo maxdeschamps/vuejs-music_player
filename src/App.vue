@@ -20,11 +20,6 @@ export default {
   components: {
     MusicBar,
   },
-  data() {
-    return {
-      audio: "",
-    };
-  },
   created() {
     if (!localStorage.getItem("data")) {
       localStorage.setItem("data", JSON.stringify(data));
@@ -54,40 +49,48 @@ export default {
       }
     },
     createMusic() {
-      this.audio = new Audio(
+      this.$store.state.audio = new Audio(
         require("@/" + this.$store.state.musics[this.$store.state.music].url)
       );
 
       if (this.$store.state.play) {
-        this.audio.play();
+        this.$store.state.audio.play();
       }
-      this.audio.muted = this.$store.state.sound.muted;
-      this.audio.volume = this.$store.state.sound.volume;
+      this.$store.state.audio.muted = this.$store.state.sound.muted;
+      this.$store.state.audio.volume = this.$store.state.sound.volume;
 
       const localThis = this;
-      this.audio.addEventListener("loadedmetadata", function () {
+      this.$store.state.audio.addEventListener("loadedmetadata", function () {
         localThis.$store.state.duration.totalDuration = Math.round(
-          localThis.audio.duration
+          localThis.$store.state.audio.duration
         );
       });
-      this.audio.addEventListener("ended", this.changeMusic);
-      this.audio.addEventListener("timeupdate", this.progressMusic);
+      this.$store.state.audio.addEventListener("ended", this.changeMusic);
+      this.$store.state.audio.addEventListener(
+        "timeupdate",
+        this.progressMusic
+      );
     },
     deleteMusic() {
-      this.audio.pause();
+      this.$store.state.audio.pause();
 
       this.$store.state.duration.currentDuration = 0;
 
-      this.audio.removeEventListener("ended", this.changeMusic);
-      this.audio.removeEventListener("timeupdate", this.progressMusic);
+      this.$store.state.audio.removeEventListener("ended", this.changeMusic);
+      this.$store.state.audio.removeEventListener(
+        "timeupdate",
+        this.progressMusic
+      );
 
-      this.audio.remove();
+      this.$store.state.audio.remove();
     },
     progressMusic() {
       this.$store.state.duration.currentDuration = Math.round(
-        this.audio.currentTime
+        this.$store.state.audio.currentTime
       );
-      this.$store.state.currentDuration = Math.round(this.audio.currentTime);
+      this.$store.state.currentDuration = Math.round(
+        this.$store.state.audio.currentTime
+      );
     },
     changeMusic(next = true) {
       this.deleteMusic();

@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center align-center py-2 soundContainer mx-5">
-    <Sound :audio="audio" class="mr-4" />
+    <Sound class="mr-4" />
     <knob-control
       @change="onChange($event)"
       v-model="soundVolume"
@@ -33,9 +33,6 @@ export default {
     Sound,
     KnobControl,
   },
-  props: {
-    audio: [String, HTMLAudioElement],
-  },
   data() {
     return {
       soundVolume: "100",
@@ -47,7 +44,7 @@ export default {
   watch: {
     soundVolume(value) {
       this.$store.state.sound.volume = value;
-      this.audio.volume = this.$store.state.sound.volume;
+      this.$store.state.audio.volume = this.$store.state.sound.volume;
     },
   },
 };

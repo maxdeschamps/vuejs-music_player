@@ -30,9 +30,6 @@ export default {
       totalDuration: false,
     };
   },
-  props: {
-    audio: [String, HTMLAudioElement],
-  },
   methods: {
     handleRestTime() {
       this.totalDuration = !this.totalDuration;
@@ -40,7 +37,7 @@ export default {
     onChange(event) {
       const musicPosition =
         (this.$store.state.duration.totalDuration * event) / 100;
-      this.audio.currentTime = musicPosition;
+      this.$store.state.audio.currentTime = musicPosition;
     },
     formatedNumber(n) {
       return n > 9 ? "" + n : "0" + n;

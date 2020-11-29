@@ -14,9 +14,6 @@ export default {
   components: {
     SvgIcon,
   },
-  props: {
-    audio: [String, HTMLAudioElement],
-  },
   data() {
     return {
       iconPlay: mdiPlayCircleOutline,
@@ -26,7 +23,9 @@ export default {
   methods: {
     handleMusic() {
       this.$store.state.play = !this.$store.state.play;
-      this.$store.state.play ? this.audio.play() : this.audio.pause();
+      this.$store.state.play
+        ? this.$store.state.audio.play()
+        : this.$store.state.audio.pause();
     },
   },
 };

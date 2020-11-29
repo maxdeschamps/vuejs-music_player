@@ -24,14 +24,14 @@
 
       <div class="flex-controller">
         <div class="flex-button">
-          <Play :audio="audio" />
+          <Play />
           <Previous @changeMusic="changeMusic" />
           <Next @changeMusic="changeMusic" />
         </div>
 
         <div class="flex-control-bar">
-          <ProgressBar :audio="audio" class="progress-bar" />
-          <SoundController :audio="audio" class="sound-bar" />
+          <ProgressBar class="progress-bar" />
+          <SoundController class="sound-bar" />
         </div>
       </div>
     </div>
@@ -56,9 +56,6 @@ export default {
     Previous,
     Next,
     Like,
-  },
-  props: {
-    audio: [String, HTMLAudioElement],
   },
   methods: {
     changeMusic(next) {
